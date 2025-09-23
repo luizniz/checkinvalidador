@@ -27,6 +27,12 @@ def login():
             flash("Senha incorreta!", "danger")
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    # Aqui você pode limpar a sessão ou apenas redirecionar para a página inicial
+    session.clear()  # só se estiver usando sessões
+    return redirect(url_for("upload"))
+
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     global database, filename

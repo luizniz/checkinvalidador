@@ -9,13 +9,14 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            min-height: 100vh;
+            min-height: 90vh;
             margin: 0;
             background: #f4f4f4;
-            padding: 20px 0;
+            padding: 15px 0;
         }
         .container {
             width: 80%;
+            max-height: 85vh; /* limite de altura */
             background: white;
             padding: 20px;
             border-radius: 12px;
@@ -23,7 +24,6 @@
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
         h2 { margin-bottom: 20px; }
         .input { padding: 10px; width: 90%; margin: 10px 0; border-radius: 6px; border: 1px solid #ccc; }
@@ -32,7 +32,7 @@
         .success { color: green; font-weight: bold; font-size: 16px; }
         .error { color: red; font-weight: bold; font-size: 16px; }
         hr { margin: 15px 0; border: 0; border-top: 1px solid #ccc; }
-        .footer { font-size: 12px; color: #555; text-align: center; margin-top: 15px; }
+        .footer { font-size: 12px; color: #555; text-align: center; margin-top: 10px; }
         .info { margin: 10px 0; text-align: center; }
         .highlight { font-size: 18px; font-weight: bold; }
         .small { font-size: 13px; color: #333; }
@@ -43,6 +43,12 @@
             height: 80px;
             width: auto;
             margin-bottom: 20px;
+        }
+        /* Área rolável para conteúdo dinâmico */
+        .scrollable {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px; /* espaço para scrollbar */
         }
     </style>
 </head>
@@ -68,17 +74,19 @@
                   {% endif %}
                 {% endwith %}
             </div>
+        </div>
 
+        <!-- Conteúdo que pode rolar -->
+        <div class="scrollable">
             {% block content %}{% endblock %}
         </div>
 
-        <div>
-            <div class="footer">
-                {% if filename %}
-                    Arquivo: <b>{{ filename }}</b><br>
-                {% endif %}
-                Data: {{ date }}
-            </div>
+        <!-- Rodapé fixo -->
+        <div class="footer">
+            {% if filename %}
+                Arquivo: <b>{{ filename }}</b><br>
+            {% endif %}
+            Data: {{ date }}
         </div>
     </div>
 </body>

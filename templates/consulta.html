@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Consulta de Check-in</h2>
+    <form method="post">
+        <input class="input" type="text" name="cpf" placeholder="Digite o CPF" required><br>
+        <button class="btn" type="submit">Consultar</button>
+    </form>
+    <a class="link-logout" href="{{ url_for('logout') }}">Sair</a>
+
+    <div style="margin-top:12px;">
+        {% if registros %}
+            {% for r in registros %}
+                <div class="info">
+                    <p class="highlight">{{ r.nome }}</p>
+                    <p class="small"><b>Plano:</b> {{ r.plano }}</p>
+                    <p class="small"><b>Setor:</b> {{ r.setor }}</p>
+                    <p class="{{ r.status_class }}"><b>{{ r.status }}</b></p>
+                    <p class="small"><b>Data Check-in:</b> {{ r.data_checkin }}</p>
+                    {% if r.status|lower == 'cancelado' and r.data_update %}
+                        <p class="small"><b>Cancelado em:</b> {{ r.data_update }}</p>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

@@ -31,7 +31,7 @@ def login():
 def logout():
     # Aqui você pode limpar a sessão ou apenas redirecionar para a página inicial
     session.clear()  # só se estiver usando sessões
-    return redirect(url_for("/"))
+    return redirect(url_for("login"))
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
@@ -81,7 +81,7 @@ def consulta():
                     )
                     registros_list.append({
                         "nome": row.get("nome", ""),
-                        "cpf": cpf,
+                        "cpf": row.get("cpf", ""),
                         "plano": row.get("plano", ""),
                         "status": status,
                         "status_class": status_class,

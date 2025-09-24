@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import pickle
 import base64
+import re
 import uuid
 
 app = Flask(__name__)
@@ -69,7 +70,7 @@ def consulta():
     if request.method == "POST":
         cpf = request.form.get("cpf")
         if cpf is not None:
-            cpf = cpf.strip()
+            cpf = re.sub(r'[^0-9]', '', cpf.strip())
         row = None
         if database is not None:
             try:

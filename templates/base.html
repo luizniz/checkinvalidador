@@ -21,7 +21,6 @@
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -36,7 +35,7 @@
         .footer { font-size: 12px; color: #555; text-align: center; margin-top: 10px; }
         .info { margin: 10px 0; text-align: center; }
         .highlight { font-size: 18px; font-weight: bold; }
-        .small { font-size: 13px; color: #333; }
+        .small { font-size: 12px; color: #353535; }
         .top-messages { margin-bottom: 8px; }
         .link-logout { font-size: 12px; color: #666; text-decoration: none; margin-top: 6px; display: inline-block; }
         .link-logout:hover { text-decoration: underline; }
@@ -68,7 +67,7 @@
     <div class="container">
         <div>
             <!-- Logo -->
-            <img src="https://prod-st-docs.s3.sa-east-1.amazonaws.com/6b72b9e0-e863-446c-a446-89ea974570fd"
+            <img src="https://prod-st-docs.s3.sa-east-1.amazonaws.com/8b90a340-eec7-412f-89d5-b3338116ddec"
                  alt="Logo" class="logo">
 
             <div class="top-messages">
@@ -95,6 +94,7 @@
 
         <!-- Rodapé fixo -->
         <div class="footer">
+            <hr>
             {% if filename %}
                 Arquivo: <b>{{ filename }}</b><br>
             {% endif %}

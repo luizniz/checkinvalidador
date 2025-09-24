@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>📑 Importar Base de Check-ins</h2>
+    <h2>📑 Importar Check-ins</h2>
     <form method="post" enctype="multipart/form-data">
         <input class="input" type="file" name="file" accept=".csv" required><br>
-        <small>🚨 Selecione um arquivo compatível enviado previamente!</small>
+        <small class="small">🚨 ATENÇÃO SELECIONE UM ARQUIVO COMPATÍVEL</small>
         <button class="btn" type="submit">Importar</button>
     </form>
     <a class="link-logout" href="{{ url_for('logout') }}">Sair</a>

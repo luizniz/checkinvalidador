@@ -81,7 +81,7 @@ def consulta():
                     )
                     registros_list.append({
                         "nome": row.get("nome", ""),
-                        "cpf": row.get("cpf", ""),
+                        "cpf": cpf,
                         "plano": row.get("plano", ""),
                         "status": status,
                         "status_class": status_class,

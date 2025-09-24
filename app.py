@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pandas as pd
 from datetime import datetime
 import os
@@ -31,7 +31,7 @@ def login():
 def logout():
     # Aqui você pode limpar a sessão ou apenas redirecionar para a página inicial
     session.clear()  # só se estiver usando sessões
-    return redirect(url_for("upload"))
+    return redirect(url_for("/"))
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
@@ -46,6 +46,7 @@ def upload():
                 if list(df.columns) != expected_cols:
                     flash("Erro: Estrutura do CSV inválida!", "danger")
                 else:
+                    df.set_index("cpf", inplace=True)
                     database = df
                     filename = file.filename
                     return redirect(url_for("consulta"))
@@ -59,32 +60,36 @@ def upload():
 def consulta():
     global database
     resultado = None
+    registros_list = []
     if request.method == "POST":
         cpf = request.form.get("cpf")
         if database is not None:
-            registros = database[database["cpf"] == cpf]
+            try:
+                registros = database.loc[[cpf]]
+            except KeyError:
+                registros = pd.DataFrame()
 
             if registros.empty:
                 resultado = f"<p class='error'>CPF {cpf} não encontrado na base.</p>"
             else:
-                saida = ""
                 for _, row in registros.iterrows():
                     status = row["checkin_status"]
-                    cor = "success" if status == "Realizado" else "error"
-
-                    saida += f"""
-                    <div class="info">
-                        <p class="highlight">{row['nome']}</p>
-                        <p><b>Plano:</b> {row['plano']}</p>
-                        <p><b>Setor:</b> {row['setor_checkin']}</p>
-                        <p class="{cor}"><b>{status}</b></p>
-                        <p><b>Data Check-in:</b> {row['data_checkin']}</p>
-                    """
-                    if status == "Cancelado":
-                        saida += f"<p><b>Cancelado em:</b> {row['data_update']}</p>"
-                    saida += "</div><hr>"
-                resultado = saida
-    return render_template("consulta.html", resultado=resultado)
+                    status_class = (
+                        "status-ok" if status == "Realizado" else
+                        "status-cancelado" if status == "Cancelado" else
+                        "status-pendente"
+                    )
+                    registros_list.append({
+                        "nome": row.get("nome", ""),
+                        "cpf": cpf,
+                        "plano": row.get("plano", ""),
+                        "status": status,
+                        "status_class": status_class,
+                        "setor_checkin": row.get("setor_checkin", ""),
+                        "data_checkin": row.get("data_checkin", ""),
+                        "data_update": row.get("data_update", "")
+                    })
+    return render_template("consulta.html", registros=registros_list, resultado=resultado)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))

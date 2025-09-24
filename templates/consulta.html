@@ -1,27 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Consulta de Check-in</h2>
-    <form method="post">
-        <input class="input" type="text" name="cpf" placeholder="Digite o CPF" required><br>
-        <button class="btn" type="submit">Consultar</button>
+    <h2>🎫 Consultar Check-in</h2>
+
+    <form method="post" action="{{ url_for('consulta') }}">
+        <input class="input" type="text" name="cpf" placeholder="🪪 Digite o CPF do Sócio" required><br>
+        <button class="btn" type="submit" aria-label="Consultar Check-in">Consultar</button>
     </form>
+    {% if resultado %}
+        {{ resultado|safe }}
+    {% endif %}
     <a class="link-logout" href="{{ url_for('logout') }}">Sair</a>
 
     <div style="margin-top:12px;">
         {% if registros %}
+            {% set primeiro = registros[0] %}
+            <p class="highlight">{{ primeiro.nome }}</p>
+            <p class="small"><b>CPF:</b> {{ primeiro.cpf }}</p>
+            <p class="small"><b>Plano:</b> {{ primeiro.plano }}</p>
             {% for r in registros %}
                 <div class="info">
-                    <p class="highlight">{{ r.nome }}</p>
-                    <p class="small"><b>Plano:</b> {{ r.plano }}</p>
-                    <p class="small"><b>Setor:</b> {{ r.setor }}</p>
-                    <p class="{{ r.status_class }}"><b>{{ r.status }}</b></p>
-                    <p class="small"><b>Data Check-in:</b> {{ r.data_checkin }}</p>
+                    <hr>
+                    {% set allowed_classes = ['status-ok', 'status-cancelado', 'status-pendente'] %}
+                    <p class="{% if r.status_class in allowed_classes %}{{ r.status_class }}{% else %}status-default{% endif %}"><b>{{ r.status }}</b></p>
+                    <p class="small"><b>Setor:</b> {{ r.setor_checkin }}</p>
+                    <p class="small"><b>Data Check-in:</b> {{ r.data_checkin[:16] }}</p>
                     {% if r.status|lower == 'cancelado' and r.data_update %}
-                        <p class="small"><b>Cancelado em:</b> {{ r.data_update }}</p>
+                        <p class="small"><b>Cancelado em:</b> {{ r.data_update[:16] }}</p>
                     {% endif %}
                 </div>
-                <hr>
+                {% if not loop.last %}
+                {% endif %}
             {% endfor %}
         {% endif %}
     </div>
